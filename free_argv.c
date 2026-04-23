@@ -1,13 +1,12 @@
+#include "shell.h"
 #include <stdlib.h>
 
 /**
- * free_argv - free argv array
+ * free_argv - free argv
  * @argv: array
  */
 void free_argv(char **argv)
 {
-	if (!argv)
-		return;
-
-	free(argv);
+	if (argv)
+		free(argv);
 }

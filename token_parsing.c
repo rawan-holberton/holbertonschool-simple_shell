@@ -3,30 +3,28 @@
 #include <string.h>
 
 /**
- * token_parsing - split line into argv
- * @line: input string
+ * token_parsing - split line
+ * @line: input
  *
- * Return: argv array
+ * Return: argv
  */
 char **token_parsing(char *line)
 {
 	char **argv;
 	char *token;
 	int i = 0;
-	int size = 64;
 
-	argv = malloc(sizeof(char *) * size);
+	argv = malloc(sizeof(char *) * 64);
 	if (!argv)
 		return (NULL);
 
-	token = strtok(line, " ");
+	token = strtok(line, " \t");
 	while (token)
 	{
-		argv[i] = token;
-		i++;
-		token = strtok(NULL, " ");
+		argv[i++] = token;
+		token = strtok(NULL, " \t");
 	}
-
 	argv[i] = NULL;
+
 	return (argv);
 }

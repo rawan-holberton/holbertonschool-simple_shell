@@ -4,14 +4,11 @@
 #include <unistd.h>
 
 /**
- * path_resolver - resolves command path
- * @cmd: command name
- *
- * Return: full path or NULL
+ * path_resolver - resolve PATH
  */
 char *path_resolver(char *cmd)
 {
-	char *path_env, *path_copy, *token, *full_path;
+	char *path, *dup, *token, *full;
 	int len;
 
 	if (!cmd)
@@ -20,34 +17,32 @@ char *path_resolver(char *cmd)
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 
-	path_env = getenv("PATH");
-	if (!path_env)
+	path = getenv("PATH");
+	if (!path)
 		return (NULL);
 
-	path_copy = strdup(path_env);
-	token = strtok(path_copy, ":");
+	dup = strdup(path);
+	if (!dup)
+		return (NULL);
 
+	token = strtok(dup, ":");
 	while (token)
 	{
 		len = strlen(token) + strlen(cmd) + 2;
-		full_path = malloc(len);
-		if (!full_path)
-			return (NULL);
+		full = malloc(len);
+		if (!full)
+			return (free(dup), NULL);
 
-		strcpy(full_path, token);
-		strcat(full_path, "/");
-		strcat(full_path, cmd);
+		strcpy(full, token);
+		strcat(full, "/");
+		strcat(full, cmd);
 
-		if (access(full_path, X_OK) == 0)
-		{
-			free(path_copy);
-			return (full_path);
-		}
+		if (access(full, X_OK) == 0)
+			return (free(dup), full);
 
-		free(full_path);
+		free(full);
 		token = strtok(NULL, ":");
 	}
-
-	free(path_copy);
+	free(dup);
 	return (NULL);
 }

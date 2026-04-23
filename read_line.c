@@ -1,36 +1,27 @@
 #include "shell.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
 /**
- * read_line - reads input from stdin
+ * read_line - read input
  *
- * Return: line (malloced) or NULL on EOF
+ * Return: line or NULL
  */
 char *read_line(void)
 {
 	char *line = NULL;
 	size_t len = 0;
-	ssize_t read;
+	ssize_t r;
 
-	read = getline(&line, &len, stdin);
-	if (read == -1)
+	r = getline(&line, &len, stdin);
+	if (r == -1)
 	{
 		free(line);
 		return (NULL);
 	}
 
-	/* remove newline */
-	if (line[read - 1] == '\n')
-		line[read - 1] = '\0';
-
-	/* ignore empty line */
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
+	if (line[r - 1] == '\n')
+		line[r - 1] = '\0';
 
 	return (line);
 }
