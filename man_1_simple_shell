@@ -1,0 +1,60 @@
+.TH HSH 1 "April 2026" "1.1" "Simple Shell Manual"
+
+.SH NAME
+hsh - simple UNIX command interpreter
+
+.SH SYNOPSIS
+.B hsh
+
+.SH DESCRIPTION
+.B hsh
+is a simple UNIX command line interpreter written in C.
+
+It reads commands from standard input, parses them, resolves executable paths, creates child processes, and executes programs.
+
+The shell works in both interactive and non-interactive modes.
+
+.SH HOW IT WORKS
+The shell follows a command processing cycle:
+.PP
+read -> parse -> resolve -> fork -> execve -> wait -> repeat
+
+.SH COMMANDS
+The shell executes commands entered by the user.
+
+Commands may be:
+.TP
+.B External commands
+Programs located using the PATH environment variable.
+.TP
+.B Built-in commands
+Commands implemented directly in the shell.
+
+.SH BUILTINS
+The following built-in commands are supported:
+.TP
+.B exit
+Exit the shell.
+.TP
+.B env
+Print the current environment variables.
+
+.SH ENVIRONMENT
+The shell uses environment variables, especially:
+.TP
+.B PATH
+Used to locate executable programs.
+
+.SH EXIT STATUS
+The shell returns 0 on success and non-zero on failure.
+
+.SH LIMITATIONS
+This shell does not support:
+.PP
+Pipes, redirections, command chaining, background execution, quoting, or wildcards.
+
+.SH AUTHORS
+Mathieu Bailliez
+.br
+Rawan Safouan
+
