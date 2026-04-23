@@ -1,60 +1,138 @@
 .TH HSH 1 "April 2026" "1.1" "Simple Shell Manual"
 
 .SH NAME
-hsh - simple UNIX command interpreter
+hsh \- simple UNIX command line interpreter
 
 .SH SYNOPSIS
 .B hsh
 
 .SH DESCRIPTION
 .B hsh
-is a simple UNIX command line interpreter written in C.
+is a simple UNIX command line interpreter written in C for educational purposes.
+It reads commands from standard input, parses them, resolves executable paths using the
+.B PATH
+environment variable, creates child processes, and executes programs using system calls.
 
-It reads commands from standard input, parses them, resolves executable paths, creates child processes, and executes programs.
+The shell behaves similarly to
+.BR sh (1)
+in basic functionality, supporting both interactive and non-interactive modes.
+It repeatedly displays a prompt, reads user input, executes commands, and waits for completion.
 
-The shell works in both interactive and non-interactive modes.
+Advanced shell features such as pipes, redirections, quoting, command chaining,
+background execution, and wildcards are not supported.
 
-.SH HOW IT WORKS
-The shell follows a command processing cycle:
+.SH EXECUTION FLOW
+The shell follows a standard command processing cycle:
+
 .PP
 read -> parse -> resolve -> fork -> execve -> wait -> repeat
 
-.SH COMMANDS
-The shell executes commands entered by the user.
-
-Commands may be:
+.PP
+More specifically:
 .TP
-.B External commands
-Programs located using the PATH environment variable.
+.B 1.
+User input is read using getline()
 .TP
-.B Built-in commands
-Commands implemented directly in the shell.
+.B 2.
+Command is parsed into arguments
+.TP
+.B 3.
+Executable is resolved via PATH lookup
+.TP
+.B 4.
+A child process is created using fork()
+.TP
+.B 5.
+The command is executed using execve() in the child process
+.TP
+.B 6.
+Parent process waits for completion using wait()
+.TP
+.B 7.
+The prompt is displayed again
 
-.SH BUILTINS
+.SH FEATURES
+- Interactive prompt display
+- Execution of commands with arguments
+- PATH-based executable resolution
+- Support for end-of-file (Ctrl+D)
+- Error handling for unknown commands
+- Built-in command support
+
+.SH BUILT-IN COMMANDS
 The following built-in commands are supported:
+
 .TP
 .B exit
-Exit the shell.
+Exit the shell and terminate the program.
+
 .TP
 .B env
 Print the current environment variables.
 
+.SH USAGE
+
+Interactive mode:
+.PP
+.RS
+$ ./hsh
+.br
+($) ls
+.br
+($) env
+.br
+($) exit
+.RE
+
+Non-interactive mode:
+.PP
+.RS
+echo "/bin/ls" | ./hsh
+.br
+cat file.txt | ./hsh
+.RE
+
 .SH ENVIRONMENT
-The shell uses environment variables, especially:
+The shell relies on environment variables, especially:
+
 .TP
 .B PATH
 Used to locate executable programs.
 
 .SH EXIT STATUS
-The shell returns 0 on success and non-zero on failure.
+Returns 0 on success and non-zero on error.
+
+.SH ERRORS
+If a command is not found, the shell prints:
+
+.PP
+.RS
+./hsh: 1: command not found
+.RE
+
+The program name corresponds to argv[0].
 
 .SH LIMITATIONS
 This shell does not support:
 .PP
-Pipes, redirections, command chaining, background execution, quoting, or wildcards.
+pipes, redirections, command chaining, background execution,
+quoting, wildcards, or scripting features.
+
+.SH REQUIREMENTS
+- Ubuntu 20.04 LTS
+- gcc -Wall -Werror -Wextra -pedantic -std=gnu89
+- Betty coding style
+- No memory leaks allowed
+- Maximum 5 functions per file
+
+.SH SEE ALSO
+sh(1), bash(1), execve(2), fork(2), wait(2), getenv(3)
 
 .SH AUTHORS
 Mathieu Bailliez
 .br
 Rawan Safouan
 
+.SH NOTES
+This project was designed for educational purposes to better understand
+UNIX process creation, system calls, and basic shell behavior.
