@@ -4,9 +4,10 @@
 #include <unistd.h>
 
 /**
- * shell_loop - main loop
+ * shell_loop - main loop of the shell
+ * @prog_name: program name (argv[0])
  */
-void shell_loop(void)
+void shell_loop(char *prog_name)
 {
 	char *line = NULL;
 	char **argv = NULL;
@@ -37,7 +38,7 @@ void shell_loop(void)
 			continue;
 		}
 
-		exec_command(argv, "./hsh", line_count);
+		exec_command(argv, prog_name, line_count);
 
 		free(line);
 		free_argv(argv);
@@ -46,12 +47,16 @@ void shell_loop(void)
 }
 
 /**
- * main - entry
+ * main - entry point
+ * @ac: argument count
+ * @av: argument vector
  *
  * Return: 0
  */
-int main(void)
+int main(int ac, char **av)
 {
-	shell_loop();
+	(void)ac;
+
+	shell_loop(av[0]);
 	return (0);
 }
