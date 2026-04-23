@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
 /**
  * shell_loop - main loop of the shell
  *
@@ -33,16 +32,12 @@ void shell_loop(void)
 			free(line);
 			continue;
 		}
-
-		/* HANDLE BUILTINS */
 		if (is_builtin(argv))
 		{
 			free(line);
 			free_argv(argv);
 			continue;
 		}
-
-		/* RESOLVE PATH */
 		cmd_path = path_resolver(argv[0]);
 
 		if (!cmd_path)
@@ -54,10 +49,7 @@ void shell_loop(void)
 		}
 
 		argv[0] = cmd_path;
-
-		/* EXECUTE COMMAND */
 		exec_command(argv);
-
 		free(line);
 		free_argv(argv);
 	}
