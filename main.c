@@ -2,63 +2,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
+
 /**
- * shell_loop - main loop of the shell
- *
- * Description: reads input, parses it, handles builtins,
- * resolves PATH and executes commands.
- *
- * Return: void
+ * shell_loop - main loop
  */
 void shell_loop(void)
 {
-	char *line;
-	char **argv;
-	char *cmd_path;
+	char *line = NULL;
+	char **argv = NULL;
+	int line_count = 0;
 
 	while (1)
 	{
+		line_count++;
+
 		if (isatty(STDIN_FILENO))
-			printf("($) ");
+			write(STDOUT_FILENO, "($) ", 4);
 
 		line = read_line();
 		if (!line)
 			break;
 
 		argv = token_parsing(line);
-		if (!argv)
-		{
-			free(line);
-			continue;
-		}
-		if (is_builtin(argv))
+		if (!argv || !argv[0])
 		{
 			free(line);
 			free_argv(argv);
 			continue;
 		}
-		cmd_path = path_resolver(argv[0]);
 
-		if (!cmd_path)
+		if (is_builtin(argv, line))
 		{
-			fprintf(stderr, "./hsh: %s: not found\n", argv[0]);
-			free(line);
 			free_argv(argv);
 			continue;
 		}
 
-		argv[0] = cmd_path;
-		exec_command(argv);
+		exec_command(argv, "./hsh", line_count);
+
 		free(line);
 		free_argv(argv);
 	}
+	free(line);
 }
 
 /**
- * main - entry point
+ * main - entry
  *
- * Return: 0 on success
+ * Return: 0
  */
 int main(void)
 {
