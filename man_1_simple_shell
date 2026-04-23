@@ -1,34 +1,67 @@
-.TH SIMPLE_SHELL 1 "April 2026" "simple_shell 0.4" "User Commands"
+.TH HSH 1 "April 2026" "1.1" "Simple Shell Manual"
+
 .SH NAME
-simple_shell \- simple UNIX command line interpreter
+hsh \- simple UNIX command line interpreter
 
 .SH SYNOPSIS
-.B simple_shell
+.B hsh
 
 .SH DESCRIPTION
-.B simple_shell
-is a minimalist UNIX command line interpreter written in C.
-It mimics basic behavior of
-.BR sh (1)
-by reading user input, parsing commands, searching for executables using the
+.B hsh
+is a simple UNIX command line interpreter written in C for educational purposes.
+It reads commands from standard input, parses them, resolves executable paths using the
 .B PATH
-environment variable, and executing programs using system calls.
+environment variable, creates child processes, and executes programs using system calls.
 
-The shell displays a prompt, waits for user input, executes commands, and
-repeats this cycle until the user exits.
+The shell behaves similarly to
+.BR sh (1)
+in basic functionality, supporting both interactive and non-interactive modes.
+It repeatedly displays a prompt, reads user input, executes commands, and waits for completion.
 
-It does not support advanced shell features such as pipes, redirections,
-quoting, or scripting.
+Advanced shell features such as pipes, redirections, quoting, command chaining,
+background execution, and wildcards are not supported.
+
+.SH EXECUTION FLOW
+The shell follows a standard command processing cycle:
+
+.PP
+read -> parse -> resolve -> fork -> execve -> wait -> repeat
+
+.PP
+More specifically:
+.TP
+.B 1.
+User input is read using getline()
+.TP
+.B 2.
+Command is parsed into arguments
+.TP
+.B 3.
+Executable is resolved via PATH lookup
+.TP
+.B 4.
+A child process is created using fork()
+.TP
+.B 5.
+The command is executed using execve() in the child process
+.TP
+.B 6.
+Parent process waits for completion using wait()
+.TP
+.B 7.
+The prompt is displayed again
 
 .SH FEATURES
-- Displays a prompt and waits for user input
-- Executes commands with arguments
-- Resolves executables using PATH
-- Handles end-of-file (Ctrl + D)
-- Prints error messages when command is not found
-- Supports built-in commands: exit, env
+- Interactive prompt display
+- Execution of commands with arguments
+- PATH-based executable resolution
+- Support for end-of-file (Ctrl+D)
+- Error handling for unknown commands
+- Built-in command support
 
 .SH BUILT-IN COMMANDS
+The following built-in commands are supported:
+
 .TP
 .B exit
 Exit the shell and terminate the program.
@@ -38,10 +71,11 @@ Exit the shell and terminate the program.
 Print the current environment variables.
 
 .SH USAGE
+
 Interactive mode:
 .PP
 .RS
-$ ./simple_shell
+$ ./hsh
 .br
 ($) ls
 .br
@@ -53,50 +87,52 @@ $ ./simple_shell
 Non-interactive mode:
 .PP
 .RS
-echo "/bin/ls" | ./simple_shell
+echo "/bin/ls" | ./hsh
 .br
-cat file.txt | ./simple_shell
+cat file.txt | ./hsh
 .RE
 
-.SH EXECUTION FLOW
-User input
-.br
-→ getline()
-.br
-→ parse command
-.br
-→ PATH lookup
-.br
-→ fork() (if command exists)
-.br
-→ execve() in child process
-.br
-→ wait() in parent process
-.br
-→ display prompt again
+.SH ENVIRONMENT
+The shell relies on environment variables, especially:
 
-.SH RETURN VALUE
-0 on success, non-zero on error.
+.TP
+.B PATH
+Used to locate executable programs.
+
+.SH EXIT STATUS
+Returns 0 on success and non-zero on error.
 
 .SH ERRORS
-If a command is not found, an error is printed in the format:
+If a command is not found, the shell prints:
+
 .PP
 .RS
-./simple_shell: 1: command not found
+./hsh: 1: command not found
 .RE
 
 The program name corresponds to argv[0].
+
+.SH LIMITATIONS
+This shell does not support:
+.PP
+pipes, redirections, command chaining, background execution,
+quoting, wildcards, or scripting features.
 
 .SH REQUIREMENTS
 - Ubuntu 20.04 LTS
 - gcc -Wall -Werror -Wextra -pedantic -std=gnu89
 - Betty coding style
-- No memory leaks
-- Max 5 functions per file
+- No memory leaks allowed
+- Maximum 5 functions per file
 
 .SH SEE ALSO
 sh(1), bash(1), execve(2), fork(2), wait(2), getenv(3)
 
-.SH AUTHOR
-This project was written for educational purposes to understand UNIX
-process creation, system calls, and shell behavior.
+.SH AUTHORS
+Mathieu Bailliez
+.br
+Rawan Safouan
+
+.SH NOTES
+This project was designed for educational purposes to better understand
+UNIX process creation, system calls, and basic shell behavior.
