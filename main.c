@@ -56,7 +56,7 @@ void shell_loop(void)
 		argv[0] = cmd_path;
 
 		/* EXECUTE COMMAND */
-		exec_command(argv);
+		exec_command(argv, argv[0], 0);
 
 		free(line);
 		free_argv(argv);

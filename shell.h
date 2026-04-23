@@ -21,6 +21,7 @@ char *path_resolver(char *cmd);
 /* BUILTINS */
 int handle_exit(char **argv, char *line, int status);
 void handle_env(void);
+int is_builtin(char **argv);
 
 /* ERRORS */
 void print_not_found(char *prog_name, int line_count, char *command);
