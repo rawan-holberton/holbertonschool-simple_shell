@@ -17,13 +17,13 @@ void exec_command(char **argv, char *prog_name, int line_count)
 	if (!argv || !argv[0])
 		return;
 
-	path = path_resolver(argv[0]);
+	path = argv[0];
 
-	if (path == NULL)
-	{
-		print_not_found(prog_name, line_count, argv[0]);
-		return;
-	}
+    if (access(path, X_OK) != 0)
+    {
+    	print_not_found(prog_name, line_count, argv[0]);
+    	return;
+    }
 
 	pid = fork();
 
@@ -43,7 +43,4 @@ void exec_command(char **argv, char *prog_name, int line_count)
 	{
 		wait(NULL);
 	}
-
-	if (path != argv[0])
-		free(path);
 }

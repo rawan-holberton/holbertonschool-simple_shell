@@ -16,7 +16,6 @@ void shell_loop(void)
 {
 	char *line;
 	char **argv;
-	char *cmd_path;
 
 	while (1)
 	{
@@ -41,26 +40,21 @@ void shell_loop(void)
 			free_argv(argv);
 			continue;
 		}
+		
+		if (!argv[0])
+        {
+            free(line);
+            free_argv(argv);
+            continue;
+        }
 
-		/* RESOLVE PATH */
-		cmd_path = path_resolver(argv[0]);
+       
+        exec_command(argv, "./hsh", 0);
 
-		if (!cmd_path)
-		{
-			fprintf(stderr, "./hsh: %s: not found\n", argv[0]);
-			free(line);
-			free_argv(argv);
-			continue;
-		}
 
-		argv[0] = cmd_path;
-
-		/* EXECUTE COMMAND */
-		exec_command(argv, argv[0], 0);
-
-		free(line);
-		free_argv(argv);
-	}
+        free(line);
+        free_argv(argv);
+    }
 }
 
 /**

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 /* GLOBAL */
 extern char **environ;
