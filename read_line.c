@@ -10,27 +10,27 @@
  */
 char *read_line(void)
 {
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
+        char *line = NULL;
+        size_t len = 0;
+        ssize_t read;
 
-	read = getline(&line, &len, stdin);
-	if (read == -1)
-	{
-		free(line);
-		return (NULL);
-	}
+        read = getline(&line, &len, stdin);
+        if (read == -1)
+        {
+                free(line);
+                return (NULL);
+        }
 
-	/* remove newline */
-	if (line[read - 1] == '\n')
-		line[read - 1] = '\0';
+        /* remove newline */
+        if (line[read - 1] == '\n')
+                line[read - 1] = '\0';
 
-	/* ignore empty line */
-	if (line[0] == '\0')
-	{
-		free(line);
-		return (NULL);
-	}
+        /* ignore empty line */
+        if (line[0] == '\0')
+        {
+                free(line);
+                return (NULL);
+        }
 
-	return (line);
+        return (line);
 }

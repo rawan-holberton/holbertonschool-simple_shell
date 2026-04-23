@@ -10,23 +10,23 @@
  */
 char **token_parsing(char *line)
 {
-	char **argv;
-	char *token;
-	int i = 0;
-	int size = 64;
+		char **argv;
+		char *token;
+		int i = 0;
+		int size = 64;
 
-	argv = malloc(sizeof(char *) * size);
-	if (!argv)
-		return (NULL);
+		argv = malloc(sizeof(char *) * size);
+		if (!argv)
+				return (NULL);
 
-	token = strtok(line, " ");
-	while (token)
-	{
-		argv[i] = token;
-		i++;
-		token = strtok(NULL, " ");
-	}
+		token = strtok(line, " ");
+		while (token)
+		{
+				argv[i] = token;
+				i++;
+				token = strtok(NULL, " ");
+		}
 
-	argv[i] = NULL;
-	return (argv);
+		argv[i] = NULL;
+		return (argv);
 }

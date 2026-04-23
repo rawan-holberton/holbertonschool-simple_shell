@@ -1,7 +1,5 @@
-#include "shell.h"
-#include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /**
  * build_command - check if command exists
@@ -11,20 +9,20 @@
  */
 char *build_command(char *cmd)
 {
-	if (!cmd)
-		return (NULL);
+		if (!cmd)
+				return (NULL);
 
-	/* if already full path */
-	if (cmd[0] == '/')
-	{
+		/* if already full path */
+		if (cmd[0] == '/')
+		{
+				if (access(cmd, X_OK) == 0)
+						return (cmd);
+				return (NULL);
+		}
+
+		/* simple PATH resolution (minimal) */
 		if (access(cmd, X_OK) == 0)
-			return (cmd);
+				return (cmd);
+
 		return (NULL);
-	}
-
-	/* simple PATH resolution (minimal) */
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
-
-	return (NULL);
 }

@@ -1,25 +1,25 @@
 #include "shell.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 
 /**
- * shell_loop - main loop of the shell
+ * main - simple shell loop
  *
- * Description: reads input, parses it, handles builtins,
- * resolves PATH and executes commands.
- *
- * Return: void
+ * Return: 0
  */
-void shell_loop(void)
+int main(int ac, char **av)
 {
 	char *line;
 	char **argv;
-	char *cmd_path;
+	int line_count = 0;
+
+	(void)ac;
 
 	while (1)
 	{
+		line_count++;
+
 		if (isatty(STDIN_FILENO))
 			printf("($) ");
 
@@ -34,42 +34,23 @@ void shell_loop(void)
 			continue;
 		}
 
-		/* HANDLE BUILTINS */
-		if (is_builtin(argv))
+		/* BUILTINS */
+		if (argv[0] && strcmp(argv[0], "exit") == 0)
 		{
-			free(line);
-			free_argv(argv);
-			continue;
+			handle_exit(argv, line, 0);
+		}
+		else if (argv[0] && strcmp(argv[0], "env") == 0)
+		{
+			handle_env();
+		}
+		else
+		{
+			exec_command(argv, av[0], line_count);
 		}
 
-		/* RESOLVE PATH */
-		cmd_path = path_resolver(argv[0]);
-
-		if (!cmd_path)
-		{
-			fprintf(stderr, "./hsh: %s: not found\n", argv[0]);
-			free(line);
-			free_argv(argv);
-			continue;
-		}
-
-		argv[0] = cmd_path;
-
-		/* EXECUTE COMMAND */
-		exec_command(argv);
-
-		free(line);
 		free_argv(argv);
+		free(line);
 	}
-}
 
-/**
- * main - entry point
- *
- * Return: 0 on success
- */
-int main(void)
-{
-	shell_loop();
 	return (0);
 }

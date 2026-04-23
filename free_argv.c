@@ -6,8 +6,8 @@
  */
 void free_argv(char **argv)
 {
-	if (!argv)
-		return;
+        if (!argv)
+                return;
 
-	free(argv);
+        free(argv);
 }
