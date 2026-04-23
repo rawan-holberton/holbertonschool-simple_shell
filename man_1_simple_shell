@@ -1,0 +1,102 @@
+.TH SIMPLE_SHELL 1 "April 2026" "simple_shell 0.4" "User Commands"
+.SH NAME
+simple_shell \- simple UNIX command line interpreter
+
+.SH SYNOPSIS
+.B simple_shell
+
+.SH DESCRIPTION
+.B simple_shell
+is a minimalist UNIX command line interpreter written in C.
+It mimics basic behavior of
+.BR sh (1)
+by reading user input, parsing commands, searching for executables using the
+.B PATH
+environment variable, and executing programs using system calls.
+
+The shell displays a prompt, waits for user input, executes commands, and
+repeats this cycle until the user exits.
+
+It does not support advanced shell features such as pipes, redirections,
+quoting, or scripting.
+
+.SH FEATURES
+- Displays a prompt and waits for user input
+- Executes commands with arguments
+- Resolves executables using PATH
+- Handles end-of-file (Ctrl + D)
+- Prints error messages when command is not found
+- Supports built-in commands: exit, env
+
+.SH BUILT-IN COMMANDS
+.TP
+.B exit
+Exit the shell and terminate the program.
+
+.TP
+.B env
+Print the current environment variables.
+
+.SH USAGE
+Interactive mode:
+.PP
+.RS
+$ ./simple_shell
+.br
+($) ls
+.br
+($) env
+.br
+($) exit
+.RE
+
+Non-interactive mode:
+.PP
+.RS
+echo "/bin/ls" | ./simple_shell
+.br
+cat file.txt | ./simple_shell
+.RE
+
+.SH EXECUTION FLOW
+User input
+.br
+→ getline()
+.br
+→ parse command
+.br
+→ PATH lookup
+.br
+→ fork() (if command exists)
+.br
+→ execve() in child process
+.br
+→ wait() in parent process
+.br
+→ display prompt again
+
+.SH RETURN VALUE
+0 on success, non-zero on error.
+
+.SH ERRORS
+If a command is not found, an error is printed in the format:
+.PP
+.RS
+./simple_shell: 1: command not found
+.RE
+
+The program name corresponds to argv[0].
+
+.SH REQUIREMENTS
+- Ubuntu 20.04 LTS
+- gcc -Wall -Werror -Wextra -pedantic -std=gnu89
+- Betty coding style
+- No memory leaks
+- Max 5 functions per file
+
+.SH SEE ALSO
+sh(1), bash(1), execve(2), fork(2), wait(2), getenv(3)
+
+.SH AUTHOR
+This project was written for educational purposes to understand UNIX
+process creation, system calls, and shell behavior.
