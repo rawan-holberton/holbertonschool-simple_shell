@@ -4,7 +4,10 @@
 #include <unistd.h>
 
 /**
- * path_resolver - resolve PATH
+ * path_resolver - resolve command path using PATH
+ * @cmd: command name
+ *
+ * Return: full path or NULL if not found
  */
 char *path_resolver(char *cmd)
 {

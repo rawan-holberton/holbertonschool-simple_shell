@@ -3,10 +3,10 @@
 #include <string.h>
 
 /**
- * token_parsing - split line
- * @line: input
+ * token_parsing - split input line into arguments
+ * @line: input string
  *
- * Return: argv
+ * Return: array of arguments
  */
 char **token_parsing(char *line)
 {

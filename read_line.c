@@ -3,9 +3,9 @@
 #include <stdio.h>
 
 /**
- * read_line - read input
+ * read_line - read a line from stdin
  *
- * Return: line or NULL
+ * Return: allocated line or NULL on EOF
  */
 char *read_line(void)
 {

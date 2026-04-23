@@ -5,7 +5,10 @@
 #include <stdio.h>
 
 /**
- * exec_command - execute command
+ * exec_command - execute a command with fork and execve
+ * @argv: arguments array
+ * @prog_name: program name
+ * @line_count: command line count
  */
 void exec_command(char **argv, char *prog_name, int line_count)
 {

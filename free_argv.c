@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 /**
- * free_argv - free argv
- * @argv: array
+ * free_argv - free argument array
+ * @argv: array to free
  */
 void free_argv(char **argv)
 {
